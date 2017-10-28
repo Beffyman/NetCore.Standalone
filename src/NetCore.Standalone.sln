@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore.Standalone", "NetCore.Standalone\NetCore.Standalone.csproj", "{BD2F9988-0D90-4110-809E-03955EDF0821}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E43B16A-EC28-4E8A-B994-3C2D6E16738D}"
+	ProjectSection(SolutionItems) = preProject
+		..\.travis.yml = ..\.travis.yml
+		..\build.sh = ..\build.sh
+		..\Diagram.plantuml = ..\Diagram.plantuml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore.Standalone.Tests", "NetCore.Standalone.Tests\NetCore.Standalone.Tests.csproj", "{899D018D-CC31-4665-9C08-B7E569DF7967}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD2F9988-0D90-4110-809E-03955EDF0821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD2F9988-0D90-4110-809E-03955EDF0821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD2F9988-0D90-4110-809E-03955EDF0821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD2F9988-0D90-4110-809E-03955EDF0821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{899D018D-CC31-4665-9C08-B7E569DF7967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{899D018D-CC31-4665-9C08-B7E569DF7967}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{899D018D-CC31-4665-9C08-B7E569DF7967}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{899D018D-CC31-4665-9C08-B7E569DF7967}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3169BEDD-8E31-4029-8CE4-ACEAEE9497CC}
+	EndGlobalSection
+EndGlobal
