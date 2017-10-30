@@ -5,9 +5,11 @@
 		<version>$version$</version>
 		<description>Application infrastructure like Asp.Net.Core for standalone services.</description>
 		<authors>Beffyman</authors>
-		<dependencies targetFramework="netstandard2.0">
-			<dependency id="Microsoft.Extensions.DependencyInjection" version="2.0.0" />
-			<dependency id="System.ComponentModel.TypeConverter" version="4.3.0" />
+		<dependencies>
+			<group targetFramework="netstandard2.0">
+				<dependency id="Microsoft.Extensions.DependencyInjection" version="2.0.0" />
+				<dependency id="System.ComponentModel.TypeConverter" version="4.3.0" />
+			</group>
 		</dependencies>
 	</metadata>
 	<files>
