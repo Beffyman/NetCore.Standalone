@@ -73,7 +73,18 @@ namespace NetCore.Standalone.Startup
 
 			await CustomConfigureAsync(services, app);
 
-			Provider = services.BuildServiceProvider();
+			Provider = CreateProvider(services, app);
+		}
+
+		/// <summary>
+		/// Builds the provider, can be overridden
+		/// </summary>
+		/// <param name="services"></param>
+		/// <param name="app"></param>
+		/// <returns></returns>
+		protected virtual IServiceProvider CreateProvider(IServiceCollection services, IApplicationBuilder app)
+		{
+			return services.BuildServiceProvider();
 		}
 
 		/// <summary>
