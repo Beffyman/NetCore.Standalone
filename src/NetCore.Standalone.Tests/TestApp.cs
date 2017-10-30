@@ -4,18 +4,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NetCore.Standalone.Execution;
 using System.Threading;
 using System;
-using NetCore.Standalone.Lifecycle;
-using NetCore.Standalone.Container;
+using NetCore.Standalone.AppServices;
+using NetCore.Standalone.Startup;
+using NetCore.Standalone.Injectable;
 
 namespace NetCore.Standalone.Tests
 {
-	public class TestCancelerService : ILifecycleService
+	public class TestCancelerService : AppService
 	{
 		private IApplicationCanceler _applicationCanceller;
 		private ITestSingletonService _testSingletonService;
 		private ITestTransientService _testTransientService;
 		private ITestScopedService _testScopedService;
-		private Timer _timer;
+
+		public override bool WorkBlocks { get; protected set; } = false;
+		protected override TimeSpan WorkInterval { get; set; } = TimeSpan.FromSeconds(10);
 
 		public TestCancelerService(IApplicationCanceler applicationCanceler,
 			ITestSingletonService testSingletonService,
@@ -28,35 +31,33 @@ namespace NetCore.Standalone.Tests
 			_testScopedService = testScopedService;
 		}
 
-		private void Callback(object state)
+		public override async Task OnStartAsync()
+		{
+			await Task.CompletedTask;
+		}
+
+		public override async Task OnStopAsync()
+		{
+
+			await Task.CompletedTask;
+		}
+
+		protected override async Task DoWorkAsync()
 		{
 			_applicationCanceller.Shutdown();
-		}
-
-		public async Task StartAsync()
-		{
-			_timer = new Timer(Callback, null, 5000, Timeout.Infinite);
-
-
 			await Task.CompletedTask;
 		}
 
-		public async Task StopAsync()
+		protected override void HandleError(Exception ex)
 		{
 
-			await Task.CompletedTask;
 		}
 	}
 
 	public class TestStartup : BaseStartup
 	{
-		public override async Task ConfigureAsync(IServiceCollection services, IApplicationBuilder app)
+		public override async Task CustomConfigureAsync(IServiceCollection services, IApplicationBuilder app)
 		{
-			services.AddSingleton(app);
-			await InvokeOnConfigureServicesAsync(services);
-
-			Provider = services.BuildServiceProvider();
-
 			await Task.CompletedTask;
 		}
 	}
@@ -106,7 +107,10 @@ namespace NetCore.Standalone.Tests
 				})
 				.UseInstallables()
 				.UseInjectables()
-				.UseLifecycleService()
+				.UseAppServices(options =>
+				{
+					options.UseOnlyTheseAppServices(typeof(TestCancelerService));
+				})
 				.Build()
 				.RunAsync();
 

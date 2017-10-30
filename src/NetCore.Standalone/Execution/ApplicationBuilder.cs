@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NetCore.Standalone.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using NetCore.Standalone.Startup;
 
 namespace NetCore.Standalone.Execution
 {
@@ -24,7 +25,7 @@ namespace NetCore.Standalone.Execution
 		/// <summary>
 		/// Options that can be configured that will modify application initialization
 		/// </summary>
-		IList<ConfiguredOption> ConfiguredOptions { get; }
+		ICollection<ConfiguredOption> ConfiguredOptions { get; }
 
 		/// <summary>
 		/// Builds and Configures the application
@@ -54,12 +55,11 @@ namespace NetCore.Standalone.Execution
 	{
 		public BaseStartup Startup { get; set; }
 		public CancellationTokenSource Cancellation { get; set; }
-
-		public IList<ConfiguredOption> ConfiguredOptions { get; private set; }
+		public ICollection<ConfiguredOption> ConfiguredOptions { get; private set; }
 
 		public ApplicationBuilder()
 		{
-			ConfiguredOptions = new List<ConfiguredOption>();
+			ConfiguredOptions = new HashSet<ConfiguredOption>();
 		}
 
 		/// <summary>

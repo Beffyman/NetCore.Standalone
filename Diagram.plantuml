@@ -1,35 +1,17 @@
 @startuml
 [IApplicationBuilder]
-[IApplicationBuilderMethods]
-[ConfiguredOptions]
-[OnBuild]
-[OnConfigure]
-[OnStart]
-[OnStop]
-[Startup]
+[Build]
+[Configure]
 [IApplication]
+[Start]
 [Run]
 [Stop]
 
-
-
-[IApplicationBuilderMethods] --> [ConfiguredOptions]
-[ConfiguredOptions] --> [OnBuild]
-[ConfiguredOptions] --> [OnConfigure]
-[ConfiguredOptions] --> [OnStart]
-[ConfiguredOptions] --> [OnStop]
-
-[IApplicationBuilder] --> [Startup] : Build
-[OnBuild] --> [Startup]
-
-[Startup] --> [Startup] : Configure
-[OnConfigure] --> [Startup]
-
-[Startup] --> [IApplication]
-
-[OnStart] --> [Run]
-[IApplication] --> [Run] : Start
-
+[IApplicationBuilder] -> [Build]
+[Build] -> [Configure]
+[Configure] -> [IApplication]
+[IApplication] -> [Start]
+[IApplication] --> [Run]
 [Run] --> [Stop]
-[OnStop] --> [Stop]
+[Start] -> [Stop]
 @enduml

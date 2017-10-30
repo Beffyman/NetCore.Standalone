@@ -5,9 +5,7 @@
 		<version>$version$</version>
 		<description>Application infrastructure like Asp.Net.Core for standalone services.</description>
 		<authors>Beffyman</authors>
-		<dependencies>
-			<dependency id="Castle.Windsor" version="4.0.0" />
-			<dependency id="Castle.Windsor.MsDependencyInjection" version="3.0.0" />
+		<dependencies targetFramework="netstandard2.0">
 			<dependency id="Microsoft.Extensions.DependencyInjection" version="2.0.0" />
 			<dependency id="System.ComponentModel.TypeConverter" version="4.3.0" />
 		</dependencies>

@@ -64,11 +64,11 @@ namespace NetCore.Standalone.Extensions
 			Console.WriteLine();
 		}
 
-		public static void WriteLifecycleServiceRegister(Type type, ConsoleColor color = ConsoleColor.Yellow)
+		public static void WriteAppServiceRegister(Type type, ConsoleColor color = ConsoleColor.Yellow)
 		{
 			var prev = Console.ForegroundColor;
 			Console.ForegroundColor = color;
-			Console.Write($"LIFECYCLE SERVICE ");
+			Console.Write($"APP SERVICE ");
 			Console.ForegroundColor = prev;
 			Console.Write($"{type.FullName}");
 			Console.WriteLine();

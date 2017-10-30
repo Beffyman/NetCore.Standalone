@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NetCore.Standalone.Container
+namespace NetCore.Standalone.Installable
 {
 	/// <summary>
 	/// This class is used as a locator for installable services.

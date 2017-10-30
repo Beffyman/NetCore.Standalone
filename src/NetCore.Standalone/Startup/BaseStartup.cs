@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NetCore.Standalone.Container;
-using NetCore.Standalone.Lifecycle;
+using NetCore.Standalone.Execution;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetCore.Standalone.Execution
+namespace NetCore.Standalone.Startup
 {
 	/// <summary>
 	/// Base startup implementation for applications
@@ -29,6 +28,12 @@ namespace NetCore.Standalone.Execution
 		public event Func<IServiceCollection, Task> OnConfigureServicesAsync;
 
 		/// <summary>
+		/// Arguments provided to the application on start
+		/// </summary>
+		public string[] Arguments { get; set; }
+
+
+		/// <summary>
 		/// Invokes the configuration events for services
 		/// </summary>
 		/// <param name="collection"></param>
@@ -47,12 +52,29 @@ namespace NetCore.Standalone.Execution
 		protected IServiceProvider Provider { get; set; }
 
 		/// <summary>
-		/// Configures the container and required services implemented by ConfigureServices. If you want a custom container, override this.
+		/// Custom configure options
 		/// </summary>
 		/// <param name="services"></param>
 		/// <param name="app"></param>
 		/// <returns></returns>
-		public abstract Task ConfigureAsync(IServiceCollection services, IApplicationBuilder app);
+		public abstract Task CustomConfigureAsync(IServiceCollection services, IApplicationBuilder app);
+
+		/// <summary>
+		/// Configures the services
+		/// </summary>
+		/// <param name="services"></param>
+		/// <param name="app"></param>
+		/// <returns></returns>
+		public async Task ConfigureAsync(IServiceCollection services, IApplicationBuilder app)
+		{
+			services.AddSingleton(app);
+			await InvokeOnConfigureServicesAsync(services);
+
+
+			await CustomConfigureAsync(services, app);
+
+			Provider = services.BuildServiceProvider();
+		}
 
 		/// <summary>
 		/// Starts the lifecycle services.

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NetCore.Standalone.Container;
+using NetCore.Standalone.Installable;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NetCore.Standalone.Execution;
-using NetCore.Standalone.Extensions;
-using NetCore.Standalone.Lifecycle;
+using NetCore.Standalone.Startup;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +42,7 @@ namespace NetCore.Standalone
 			BaseStartup startup = Activator.CreateInstance<T>();
 			applicationBuilder.Startup = startup;
 			applicationBuilder.Cancellation = startupOptions._cancellationToken;
-
+			startup.Arguments = startupOptions.Arguments;
 
 			Func<IApplicationBuilder, Task> onBuild = async (IApplicationBuilder appBuilder) =>
 			{
@@ -52,7 +51,7 @@ namespace NetCore.Standalone
 				await startup.ConfigureAsync(serviceCollection, applicationBuilder);
 			};
 
-			var configureOptions = new ConfiguredOption
+			var configureOptions = new ConfiguredOption("Startup")
 			{
 				OnBuild = onBuild,
 				OnConfigure = null,

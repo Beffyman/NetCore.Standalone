@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NetCore.Standalone.Execution;
 using NetCore.Standalone.Extensions;
+using NetCore.Standalone.Installable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetCore.Standalone.Container
+namespace NetCore.Standalone
 {
 	/// <summary>
 	/// Extensions to enhance the IApplicationBuilder
@@ -49,7 +50,7 @@ namespace NetCore.Standalone.Container
 				await Task.CompletedTask;
 			};
 
-			var config = new ConfiguredOption
+			var config = new ConfiguredOption("Installables")
 			{
 				OnBuild = null,
 				OnConfigure = onConfigure,

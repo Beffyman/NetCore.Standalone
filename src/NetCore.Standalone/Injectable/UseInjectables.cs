@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NetCore.Standalone.Container;
 using NetCore.Standalone.Execution;
 using NetCore.Standalone.Extensions;
+using NetCore.Standalone.Injectable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,7 +88,7 @@ namespace NetCore.Standalone
 				await Task.CompletedTask;
 			};
 
-			var config = new ConfiguredOption
+			var config = new ConfiguredOption("Injectables")
 			{
 				OnBuild = null,
 				OnConfigure = onConfigure,

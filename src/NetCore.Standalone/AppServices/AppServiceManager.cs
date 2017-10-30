@@ -1,57 +1,57 @@
-﻿using NetCore.Standalone.Container;
-using NetCore.Standalone.Extensions;
+﻿using NetCore.Standalone.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
-namespace NetCore.Standalone.Lifecycle
+namespace NetCore.Standalone.AppServices
 {
 	/// <summary>
 	/// Singleton manager for the services that start and stop with the application
 	/// </summary>
-	public interface ILifecycleServiceManager
+	public interface IAppServiceManager
 	{
 		/// <summary>
-		/// Resolves the ILifecycleService T
+		/// Resolves the IAppService T
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		T Get<T>() where T : ILifecycleService;
+		T Get<T>() where T : AppService;
 
 		/// <summary>
-		/// Resolves the ILifecycleService from the type
+		/// Resolves the IAppService from the type
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		ILifecycleService Get(Type type);
+		AppService Get(Type type);
 
 		/// <summary>
-		/// Starts all ILifecycleServices
+		/// Starts all IAppServices
 		/// </summary>
 		/// <param name="options"></param>
 		/// <returns></returns>
-		Task StartAllAsync(LifecycleServiceOptions options);
+		Task StartAllAsync(AppServiceManagerOptions options);
 
 		/// <summary>
-		/// Stops all ILifecycleServices
+		/// Stops all IAppServices
 		/// </summary>
 		/// <returns></returns>
 		Task StopAllAsync();
 	}
 
 
-	internal class LifecycleServiceManager : ILifecycleServiceManager
+	internal class AppServiceManager : IAppServiceManager
 	{
-		protected IList<ILifecycleService> Services { get; set; }
+		protected IList<AppService> Services { get; set; }
 		protected IServiceProvider Container { get; set; }
 
-		public LifecycleServiceManager(IServiceProvider container)
+		public AppServiceManager(IServiceProvider container)
 		{
 			Container = container;
-			Services = new List<ILifecycleService>();
+			Services = new List<AppService>();
 		}
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace NetCore.Standalone.Lifecycle
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T Get<T>() where T : ILifecycleService
+		public T Get<T>() where T : AppService
 		{
 			var existing = Services.SingleOrDefault(x => x.GetType() == typeof(T));
 			if (existing != null)
@@ -74,7 +74,7 @@ namespace NetCore.Standalone.Lifecycle
 			}
 		}
 
-		public ILifecycleService Get(Type type)
+		public AppService Get(Type type)
 		{
 			var existing = Services.SingleOrDefault(x => x.GetType() == type);
 			if (existing != null)
@@ -84,35 +84,40 @@ namespace NetCore.Standalone.Lifecycle
 			else
 			{
 				var instance = Container.GetService(type);
-				if (instance is ILifecycleService lcserv)
+				if (instance is AppService lcserv)
 				{
 					Services.Add(lcserv);
 					return lcserv;
 				}
 				else
 				{
-					throw new Exception($"Type {type.FullName} is not a {nameof(ILifecycleService)}");
+					throw new Exception($"Type {type.FullName} is not a {nameof(AppService)}");
 				}
 			}
 		}
 
-		public async Task StartAllAsync(LifecycleServiceOptions options)
+		public async Task StartAllAsync(AppServiceManagerOptions options)
 		{
 			Type[] types = null;
 
-			if (options._lifecycleServices != null && options._lifecycleServices.Length != 0)
+			if (options._appServices != null && options._appServices.Length != 0)
 			{
-				types = options._lifecycleServices;
+				types = options._appServices;
 			}
 			else if (options._findAll)
 			{
-				types = ReflectionLoader.Types.Where(x => typeof(ILifecycleService).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).ToArray();
+				types = ReflectionLoader.Types.Where(x => typeof(AppService).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).ToArray();
 			}
 			else
 			{
 				return;
 			}
 
+			//Order by attribute, and if none,
+			types = types.ToLookup(x => x?.GetCustomAttribute<AppServiceOrderAttribute>()?.Order ?? int.MaxValue, y => y)
+						.OrderBy(x => x.Key)
+						.SelectMany(x => x)
+						.ToArray();
 
 			foreach (var type in types)
 			{

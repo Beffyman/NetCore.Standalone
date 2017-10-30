@@ -1,17 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NetCore.Standalone.Container;
 using NetCore.Standalone.Extensions;
+using NetCore.Standalone.Installable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetCore.Standalone.Lifecycle
+namespace NetCore.Standalone.AppServices
 {
 	/// <summary>
-	/// Installs ILifecycleServices
+	/// Installs IAppService
 	/// </summary>
-	public class LifecycleServiceInstaller : IInstallable
+	public class AppServiceInstaller : IInstallable
 	{
 		/// <summary>
 		///
@@ -20,12 +20,12 @@ namespace NetCore.Standalone.Lifecycle
 		/// <returns></returns>
 		public Action<IServiceProvider> Install(IServiceCollection container)
 		{
-			var types = ReflectionLoader.Types.Where(x => typeof(ILifecycleService).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).ToList();
+			var types = ReflectionLoader.Types.Where(x => typeof(AppService).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).ToList();
 
 			foreach (var type in types)
 			{
 				container.AddSingleton(type);
-				ConsoleExtensions.WriteLifecycleServiceRegister(type);
+				ConsoleExtensions.WriteAppServiceRegister(type);
 			}
 
 			return null;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace NetCore.Standalone.Execution
+namespace NetCore.Standalone.Startup
 {
 	/// <summary>
 	/// Options for startup
@@ -11,7 +11,7 @@ namespace NetCore.Standalone.Execution
 	public sealed class ApplicationStartupOptions
 	{
 		internal CancellationTokenSource _cancellationToken = null;
-
+		internal string[] Arguments = null;
 
 		internal ApplicationStartupOptions()
 		{
@@ -25,6 +25,15 @@ namespace NetCore.Standalone.Execution
 		public void UseCancellationToken(CancellationTokenSource cancellationToken)
 		{
 			_cancellationToken = cancellationToken;
+		}
+
+		/// <summary>
+		/// Provide application arguments for the startup class to use.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public void UseArguments(params string[] arguments)
+		{
+			Arguments = arguments;
 		}
 	}
 
